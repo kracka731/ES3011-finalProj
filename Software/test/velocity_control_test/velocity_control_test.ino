@@ -143,58 +143,6 @@ int setVelocity(byte addr, double vel) {
     int status=sendCmd(addr,cmd,sizeof(cmd)); // SEND CMD
     return status;
 }
-
-void setup() {
-    Serial.begin(9600);
-    Wire.begin(); // INIT DEVICE AS I2C CONTROLLER
-}
-/*
-void loop() {
-
-    // FOR EACH MOTOR ADDRESS
-    for (int i = 0; i < MOTOR_NUM; i++) {
-        byte addr=motorAddrs[i];
-        Serial.print("Writing to address: ");
-        Serial.println(addr,HEX);
-        Serial.print("Target velocity: ");
-        Serial.println(targetVel);
-        int status=setVelocity(addr,targetVel); // SET MOTOR VELOCITY
-        Serial.print("Status: ");
-        Serial.println(status);
-
-        // READ MOTOR VARIABLES IF TRANSMISSION IS SUCCESSFUL
-        if (status < 1) {
-            delay(1000);
-            read(addr); // READ THE RETURN DATA
-
-            // PRINT VALUES PULLED FROM THE CURRENT ADDR
-            Serial.print(encoderCount);
-            Serial.print(", ");
-            Serial.print(velocity);
-            Serial.print(", ");
-            Serial.println(motorCurrent);
-            for (int vel = INITIAL_RPM; vel <= targetVel; vel = vel+RPM_INCREMENT){
-              int current_velocity = setVelocity(addr, vel);
-              delay(100);
-            }
-            for (int vel = targetVel; vel >= INITIAL_RPM; vel = vel-RPM_INCREMENT){
-              int current_velocity = setVelocity(addr, vel);
-              delay(100);
-            }
-
-
-            // INCREMENT THE RPM VALUE
-            //targetVel += (increasing)? RPM_INCREMENT : -RPM_INCREMENT;
-
-            // TOGGLE MOTOR DIRECTION
-            //if ((increasing && targetVel >= MAX_RPM) || (!increasing && targetVel <= -MAX_RPM)) increasing = !increasing;
-        }
-    }
-    
-    delay(1000);
-}
-*/
-
 void createTriangularVelocityProfile(byte addr) {
     // Increment velocity from INITIAL_RPM to MAX_RPM
     for (double vel = INITIAL_RPM; vel <= MAX_RPM; vel += RPM_INCREMENT) {
@@ -216,12 +164,17 @@ void createTriangularVelocityProfile(byte addr) {
         Serial.println(velocity); // Send actual velocity
     }
 }
+void setup() {
+    Serial.begin(9600);
+    Wire.begin(); // INIT DEVICE AS I2C CONTROLLER
+}
+
 
 void loop() {
     // FOR EACH MOTOR ADDRESS
     for (int i = 0; i < MOTOR_NUM; i++) {
         byte addr = motorAddrs[i];
-        createTriangularVelocityProfile(addr); // Create the velocity profile for each motor
+        createTriangularVelocityProfile(addr); // Create triangular velocity profile for each motor
     }
 
     delay(1000);
