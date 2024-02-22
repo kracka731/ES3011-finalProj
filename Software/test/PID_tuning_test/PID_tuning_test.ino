@@ -41,9 +41,11 @@ struct encoded_val
 int32_t encoderCount;
 double velocity;
 int32_t motorCurrent;
-double desiredDistance = 1.0;
 // double encoder_ticks_per_wheel_rev = SHAFT_REV_TO_ENCODER_TICKS * (1/ (3.14 * WHEEL_DIAMETER))
 // double targetPos = REV * SHAFT_REV_TO_ENCODER_TICKS;
+
+
+double desiredDistance = 1.0; //in Centimeter
 double targetPos = desiredDistance * 179;
 
 // Distance travelled in Centimeter

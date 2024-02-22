@@ -150,7 +150,7 @@ void setup() {
 
 void loop() {
     // SET THE DATA ARRAY
-    int32_t targetPos=rev * SHAFT_REV_TO_ENCODER_TICKS;
+    int32_t targetPos=rev * SHAFT_REV_TO_ENCODER_TICKS *(1 / (3.2* 3.14));
 
     // FOR EACH MOTOR ADDRESS
     for (int i = 0; i < MOTOR_NUM; i++) {
