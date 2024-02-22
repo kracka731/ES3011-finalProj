@@ -2,7 +2,8 @@
 #include <Wire.h>
 
 // TEST PARAMETERS
-#define INITIAL_RPM 35.0
+//#define INITIAL_RPM 35.0
+#define INITIAL_RPM 0.0
 #define MAX_RPM 50.0
 #define RPM_INCREMENT 10.0
 #define MOTOR_NUM 1
@@ -43,7 +44,7 @@ double velocity;
 int32_t motorCurrent;
 
 bool increasing = 1;
-double targetVel = INITIAL_RPM;
+//double targetVel = MAX_RPM;
 
 /**
   Send motor commands to the smart motor driver.
@@ -147,7 +148,7 @@ void setup() {
     Serial.begin(9600);
     Wire.begin(); // INIT DEVICE AS I2C CONTROLLER
 }
-
+/*
 void loop() {
 
     // FOR EACH MOTOR ADDRESS
@@ -172,14 +173,56 @@ void loop() {
             Serial.print(velocity);
             Serial.print(", ");
             Serial.println(motorCurrent);
-        
+            for (int vel = INITIAL_RPM; vel <= targetVel; vel = vel+RPM_INCREMENT){
+              int current_velocity = setVelocity(addr, vel);
+              delay(100);
+            }
+            for (int vel = targetVel; vel >= INITIAL_RPM; vel = vel-RPM_INCREMENT){
+              int current_velocity = setVelocity(addr, vel);
+              delay(100);
+            }
+
+
             // INCREMENT THE RPM VALUE
-            targetVel += (increasing)? RPM_INCREMENT : -RPM_INCREMENT;
+            //targetVel += (increasing)? RPM_INCREMENT : -RPM_INCREMENT;
 
             // TOGGLE MOTOR DIRECTION
-            if ((increasing && targetVel >= MAX_RPM) || (!increasing && targetVel <= -MAX_RPM)) increasing = !increasing;
+            //if ((increasing && targetVel >= MAX_RPM) || (!increasing && targetVel <= -MAX_RPM)) increasing = !increasing;
         }
     }
     
-    delay(5000);
+    delay(1000);
+}
+*/
+
+void createTriangularVelocityProfile(byte addr) {
+    // Increment velocity from INITIAL_RPM to MAX_RPM
+    for (double vel = INITIAL_RPM; vel <= MAX_RPM; vel += RPM_INCREMENT) {
+        setVelocity(addr, vel); // Set motor velocity
+        delay(1000); // Adjust this delay as needed
+        read(addr); // Read the actual velocity from the motor driver
+        Serial.print(vel); // Send target velocity
+        Serial.print(", ");
+        Serial.println(velocity); // Send actual velocity
+    }
+
+    // Decrement velocity from MAX_RPM to INITIAL_RPM
+    for (double vel = MAX_RPM; vel >= INITIAL_RPM; vel -= RPM_INCREMENT) {
+        setVelocity(addr, vel); // Set motor velocity
+        delay(1000); // Adjust this delay as needed
+        read(addr); // Read the actual velocity from the motor driver
+        Serial.print(vel); // Send target velocity
+        Serial.print(", ");
+        Serial.println(velocity); // Send actual velocity
+    }
+}
+
+void loop() {
+    // FOR EACH MOTOR ADDRESS
+    for (int i = 0; i < MOTOR_NUM; i++) {
+        byte addr = motorAddrs[i];
+        createTriangularVelocityProfile(addr); // Create the velocity profile for each motor
+    }
+
+    delay(1000);
 }
