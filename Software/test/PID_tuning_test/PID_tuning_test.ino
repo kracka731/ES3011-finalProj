@@ -13,7 +13,7 @@
 #define SHAFT_REV_TO_ENCODER_TICKS (ENCODER_TICKS_PER_REV * GEAR_RATIO)
 
 // PID PARAMETERS
-double Kp = 0.0;
+double Kp = 1.0;
 double Ki = 0.0;
 double Kd = 0.0;
 
