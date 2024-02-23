@@ -4,9 +4,9 @@
 
 ## PID Tuning 
 
-   1. The PID parameters (Kp, Ki, Kd) are set using the ```tunePositionPID()``` function. These parameters determine how the controller responds to the error between the target and actual positions. Proper tuning of these parameters is crucial for achieving good convergence.
-   2. Setting the Target Position: The target position is calculated based on the desired distance and the properties of the motor and wheel. This target position is then set using the ```setPosition()``` function.
-   3. The motor's actual position is continuously monitored using the ```getPosition()``` function. The PID controller uses this feedback to adjust the motor's input and reduce the position error.
+   1. The PID parameters (Kp, Ki, Kd) are set using ```tunePositionPID()```. These parameters determine how the controller responds to the error between the target and actual positions.
+   2. The target position is calculated based on the desired distance and the properties of the motor and wheel. This target position is then set using the ```setPosition()``` function.
+   3. The motor's actual position is continuously monitored using  ```getPosition()```. The PID controller uses this feedback to adjust the motor's input and reduce the position error.
       
 Using Ziegler-Nichols or any other method of your choice to tune the gains 
 - Example of the values to be changed
