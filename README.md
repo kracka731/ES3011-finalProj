@@ -2,6 +2,17 @@
 
 [This](https://github.com/mikhaildasilva/ES3011/blob/20d165d9492f7185c27da2c1a9fdc293d24631f3/Software/test/PID_tuning_test/PID_tuning_test.ino) sketch demonstrates position control of a smart motor using PID tuning. The goal is to move the motor to a specific position based on a desired distance.
 
+## PID Tuning 
+
+Using Ziegler-Nichols or any other method of your choice to tune the gains 
+
+- Example of the values to be changed
+```c
+#define DESIRED_DISTANCE_CM 20 // Desired distance in centimeters
+double Kp = 1.0; // Proportional gain
+double Ki = 0.0; // Integral gain
+double Kd = 0.0; // Derivative gain
+```
 
 ## createTriangularVelocityProfile Function
 
