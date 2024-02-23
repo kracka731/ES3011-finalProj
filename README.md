@@ -1,7 +1,7 @@
 ## createTriangularVelocityProfile Function
 
 The `createTriangularVelocityProfile` function creates a triangular velocity profile for a motor. It increments the motor's velocity from `INITIAL_RPM` to `MAX_RPM` and then decrements it back to `INITIAL_RPM`.
-[Software/test/velocity_control_test/velocity_control_test.ino](Code)
+[[[Software/test/velocity_control_test/velocity_control_test.ino](Code)](https://github.com/mikhaildasilva/ES3011/blob/df60fd108a9c9e1c1bca6b1fbec1b55bb6f93011/Software/test/velocity_control_test/velocity_control_test.ino)](https://github.com/mikhaildasilva/ES3011/blob/df60fd108a9c9e1c1bca6b1fbec1b55bb6f93011/Software/test/velocity_control_test/velocity_control_test.ino)
 ### Parameters
 
 - `addr`: The 8-bit address of the motor.
