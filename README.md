@@ -1,3 +1,8 @@
+# Position Control with Smart Motors
+
+[This](https://github.com/mikhaildasilva/ES3011/blob/20d165d9492f7185c27da2c1a9fdc293d24631f3/Software/test/PID_tuning_test/PID_tuning_test.ino) sketch demonstrates position control of a smart motor using PID tuning. The goal is to move the motor to a specific position based on a desired distance.
+
+
 ## createTriangularVelocityProfile Function
 
 The `createTriangularVelocityProfile` function creates a triangular velocity profile for a motor. It increments the motor's velocity from `INITIAL_RPM` to `MAX_RPM` and then decrements it back to `INITIAL_RPM`.
