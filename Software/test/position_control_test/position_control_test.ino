@@ -1,40 +1,28 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-// TEST PARAMETERS
-#define INITAL_REV 1
-#define MAX_REV 15
-#define REV_INCREMENT 1
-#define MOTOR_NUM 1
-// #define MOTOR_NUM 3
-
 // MOTOR PROPERTIES
-// #define GEAR_RATIO 298           // MOTOR GEAR RATIO (110:1, 125:1, OR 150:1)
-#define GEAR_RATIO 150           // MOTOR GEAR RATIO (110:1, 125:1, OR 150:1)
-#define ENCODER_TICKS_PER_REV 12 // NO OF HIGH PULSES PER ROTATION
-#define SHAFT_REV_TO_ENCODER_TICKS ENCODER_TICKS_PER_REV * GEAR_RATIO
+#define GEAR_RATIO 150            // MOTOR GEAR RATIO (110:1, 125:1, OR 150:1)
+#define ENCODER_TICKS_PER_REV 12  // NO OF HIGH PULSES PER ROTATION
+#define WHEEL_DIAMETER_CM 3.2     // Wheel diameter in centimeters
+#define SHAFT_REV_TO_ENCODER_TICKS (ENCODER_TICKS_PER_REV * GEAR_RATIO)
 
 // I2C DATA PROPERTIES
 #define RETURN_VAR_BYTES 5
 #define RETURN_VARS 3
 
 // MOTOR DRIVER FUNCTIONS
-#define TUNE_POSITION_PID 0
-#define TUNE_VELOCITY_PID 1
 #define SET_POSITION 2
-#define SET_VELOCITY 3
-#define RESET 4
 
-// INIT MOTORS ADDRESSES
-byte motorAddrs[MOTOR_NUM] = {0x07};
-// byte motorAddrs[MOTOR_NUM] = {0x04, 0x05, 0x06};
+// INIT MOTORS ADDRESS
+byte motorAddr = 0x07;
 
 // INIT RETURN DATA
-byte returnData[RETURN_VARS*RETURN_VAR_BYTES] {0};
+byte returnData[RETURN_VARS * RETURN_VAR_BYTES] {0};
 
 struct encoded_val {
-  byte coeff[4]={0};
-  byte exp=0;
+  byte coeff[4] = {0};
+  byte exp = 0;
 };
 
 // QUERIED MOTOR VARIABLES
@@ -42,14 +30,13 @@ int32_t encoderCount;
 double velocity;
 int32_t motorCurrent;
 
-bool increasing = 1;
-int32_t rev = INITAL_REV;
-
 /**
   Send motor commands to the smart motor driver.
 
   @param addr 8-bit motor address.
 */
+
+
 int sendCmd(byte addr, byte cmd[], int cmdBytes) {
     Wire.beginTransmission(addr); // BEGIN TRANSMISSION
     Wire.write(cmd,cmdBytes); // WRITE BYTES TO THE GIVEN ADDRESS
@@ -145,45 +132,31 @@ int setPosition(byte addr, int32_t pos) {
 
 void setup() {
     Serial.begin(9600);
-    Wire.begin(); // INIT DEVICE AS I2C CONTROLLER
+    Wire.begin();
 }
 
 void loop() {
-    // SET THE DATA ARRAY
-    int32_t targetPos=rev * SHAFT_REV_TO_ENCODER_TICKS;
+    // Calculate the target position based on 20 cm distance
+    double wheelCircumference = PI * WHEEL_DIAMETER_CM;
+    double revolutionsRequired = 50.0 / wheelCircumference;
+    int32_t targetPos = revolutionsRequired * SHAFT_REV_TO_ENCODER_TICKS;
 
-    // FOR EACH MOTOR ADDRESS
-    for (int i = 0; i < MOTOR_NUM; i++) {
-        byte addr=motorAddrs[i];
-        Serial.print("Writing to address: ");
-        Serial.println(addr,HEX);
-        Serial.print("Revolutions: ");
-        Serial.println(rev);
+    // Set the motor position
+    int status = setPosition(motorAddr, targetPos);
+    if (status == 0) {
+        // Read the actual position
+        delay(1000);
+        read(motorAddr);
+
+        // Print the target and actual positions
         Serial.print("Target position: ");
         Serial.println(targetPos);
-        int status=setPosition(addr,targetPos); // SET MOTOR POSITION
-        Serial.print("Status: ");
-        Serial.println(status);
-
-        // READ MOTOR VARIABLES IF TRANSMISSION IS SUCCESSFUL
-        if (status < 1) {
-            delay(1000);
-            read(addr); // READ THE RETURN DATA
-
-            // PRINT VALUES PULLED FROM THE CURRENT ADDR
-            Serial.print(encoderCount);
-            Serial.print(", ");
-            Serial.print(velocity);
-            Serial.print(", ");
-            Serial.println(motorCurrent);
-
-            // INCREMENT THE REVOLUTIONS VALUE
-            rev += (increasing)? REV_INCREMENT : -REV_INCREMENT;
-
-            // TOGGLE MOTOR DIRECTION
-            if ((increasing && rev >= MAX_REV) || (!increasing && rev <= -MAX_REV)) increasing = !increasing;
-        }
+        Serial.print("Actual position: ");
+        Serial.println(encoderCount);
     }
-    
-    delay(5000);
+
+    // Stop the loop after moving 20 cm
+    while (1) {
+        delay(1000);
+    }
 }
