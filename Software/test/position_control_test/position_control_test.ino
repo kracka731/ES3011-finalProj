@@ -29,7 +29,7 @@ struct encoded_val {
 int32_t encoderCount;
 double velocity;
 int32_t motorCurrent;
-
+double desiredDistance = 50.0; /desired distance in CM
 /**
   Send motor commands to the smart motor driver.
 
@@ -138,7 +138,7 @@ void setup() {
 void loop() {
     // Calculate the target position based on 20 cm distance
     double wheelCircumference = PI * WHEEL_DIAMETER_CM;
-    double revolutionsRequired = 50.0 / wheelCircumference;
+    double revolutionsRequired = desiredDistance / wheelCircumference;
     int32_t targetPos = revolutionsRequired * SHAFT_REV_TO_ENCODER_TICKS;
 
     // Set the motor position
