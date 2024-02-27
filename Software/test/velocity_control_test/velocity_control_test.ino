@@ -4,7 +4,7 @@
 // TEST PARAMETERS
 //#define INITIAL_RPM 35.0
 #define INITIAL_RPM 0.0
-#define MAX_RPM 50.0
+#define MAX_RPM 65.0
 #define RPM_INCREMENT 10.0
 #define MOTOR_NUM 1
 // #define MOTOR_NUM 3
