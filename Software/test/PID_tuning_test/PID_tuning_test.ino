@@ -13,9 +13,9 @@
 #define SHAFT_REV_TO_ENCODER_TICKS (ENCODER_TICKS_PER_REV * GEAR_RATIO)
 
 // PID PARAMETERS
-double Kp = 1.0;
-double Ki = 0.0;
-double Kd = 0.0;
+double Kp = 3.5;
+double Ki = 0.005;
+double Kd = 0.05;
 
 // INIT SMART MOTORS
 SmartMotor motors[MOTOR_NUM] = {0x07};
