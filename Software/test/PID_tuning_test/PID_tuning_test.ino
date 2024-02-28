@@ -3,12 +3,12 @@
 #include <SmartMotor.h>
 
 // TEST PARAMETERS
-#define DESIRED_DISTANCE_CM 50 // Desired distance in centimeters
+#define DESIRED_DISTANCE_CM 00 // Desired distance in centimeters
 #define INITIAL_RPM 0.0
 #define MAX_RPM 65.0
 #define RPM_INCREMENT 10.0
 #define MOTOR_NUM 1
-
+Doc 
 // MOTOR PROPERTIES
 #define GEAR_RATIO 150           // MOTOR GEAR RATIO
 #define ENCODER_TICKS_PER_REV 12 // NO. OF HIGH PULSES PER ROTATION
