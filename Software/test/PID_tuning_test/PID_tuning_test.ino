@@ -3,7 +3,7 @@
 #include <SmartMotor.h>
 
 // TEST PARAMETERS
-#define DESIRED_DISTANCE_CM 20 // Desired distance in centimeters
+#define DESIRED_DISTANCE_CM 50 // Desired distance in centimeters
 #define MOTOR_NUM 1
 
 // MOTOR PROPERTIES
@@ -15,7 +15,7 @@
 // PID PARAMETERS
 double Kp = 3.5;
 double Ki = 0.005;
-double Kd = 0.05;
+double Kd = 0.005;
 
 // INIT SMART MOTORS
 SmartMotor motors[MOTOR_NUM] = {0x07};
