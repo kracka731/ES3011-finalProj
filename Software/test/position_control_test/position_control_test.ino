@@ -29,7 +29,7 @@ struct encoded_val {
 int32_t encoderCount;
 double velocity;
 int32_t motorCurrent;
-double desiredDistance = 1000.0; //desired distance in CM
+double desiredDistance = 0.0; //desired distance in CM
 /**
   Send motor commands to the smart motor driver.
 
